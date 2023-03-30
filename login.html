@@ -79,7 +79,8 @@
                 })
                 .catch(error => {
                     // alert(response.data.message)
-                    console.log(JSON.stringify(error));
+                    // console.log(JSON.stringify(error));
+                    console.log(error)
                     
                     document.body.innerHTML += `<div style = "color : red;"> ${error.message} </div>`
                 });
