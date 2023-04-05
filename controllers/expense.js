@@ -41,14 +41,19 @@ const getexpenses = (req, res) => {
         })
 }
 
-const deleteexpense = (req, res) => {
+const deleteexpense = async (req, res) => {
     const expenseid = req.params.expenseid;
     if (expenseid == undefined || expenseid.length === 0) {
         return res.status(400).json({ success: false, })
     }
+    
+    //  const exp =  await Expense.findAll({ where: { id: expenseid } })
+
+    //  console.log("expense is >>>>>>>>>>>>>>>>>>>>>>>>>>>>", exp)
+
     Expense.destroy({ where: { id: expenseid, userId: req.user.id } }).then((noofrows) => {
         if (noofrows === 0) {
-            return res.status(404).json({ success: false, message: 'Expense doenst belong to the user' })
+            return res.status(404).json({ success: false, message: 'Expense doesnt belong to the user' })
         }
         return res.status(200).json({ success: true, message: "Deleted Successfuly" })
     }).catch(err => {
