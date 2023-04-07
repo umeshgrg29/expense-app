@@ -1,6 +1,30 @@
 const Expense = require('../models/expenses');
 const User = require('../models/users')
 const sequelize = require('../util/database')
+const UserServices = require('../services/userservices')
+const S3service = require('../services/S3services')
+
+
+const downloadexpense = async (req, res) => {
+    try {
+
+        if (!req.user.ispremiumuser) {
+            return res.status(401).json({ success: false, message: 'User is not a premium User' })
+        }
+        const expenses = await UserServices.getExpenses(req);
+        // console.log(expenses)
+        const stringifiedExpenses = JSON.stringify(expenses);
+        const userId = req.user.id;
+        const filename = `Expense${userId}/${new Date()}.txt`
+        const fileURL = await S3service.uploadToS3(stringifiedExpenses, filename);
+        // console.log(fileURL)
+        res.status(200).json({ fileURL, success: true })
+    }
+    catch(err){
+        console.log(err)
+        res.status(500).json({fileURL : '', success: false})
+    }
+}
 
 const addexpense = async (req, res) => {
     const t = await sequelize.transaction();
@@ -46,7 +70,7 @@ const deleteexpense = async (req, res) => {
     if (expenseid == undefined || expenseid.length === 0) {
         return res.status(400).json({ success: false, })
     }
-    
+
     //  const exp =  await Expense.findAll({ where: { id: expenseid } })
 
     //  console.log("expense is >>>>>>>>>>>>>>>>>>>>>>>>>>>>", exp)
@@ -65,5 +89,6 @@ const deleteexpense = async (req, res) => {
 module.exports = {
     deleteexpense,
     getexpenses,
-    addexpense
+    addexpense,
+    downloadexpense
 }
