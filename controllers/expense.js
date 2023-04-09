@@ -20,9 +20,9 @@ const downloadexpense = async (req, res) => {
         // console.log(fileURL)
         res.status(200).json({ fileURL, success: true })
     }
-    catch(err){
+    catch (err) {
         console.log(err)
-        res.status(500).json({fileURL : '', success: false})
+        res.status(500).json({ fileURL: '', success: false })
     }
 }
 
@@ -53,16 +53,49 @@ const addexpense = async (req, res) => {
     }
 }
 
-const getexpenses = (req, res) => {
+// const getexpenses = (req, res) => {
 
-    Expense.findAll({ where: { userId: req.user.id } }).then(expenses => {
-        // console.log('>>>>>>>>>>>>>>inside expense', expenses)
-        return res.status(200).json({ expenses, success: true })
+//     Expense.findAll({ where: { userId: req.user.id } }).then(expenses => {
+//         // console.log('>>>>>>>>>>>>>>inside expense', expenses)
+//         return res.status(200).json({ expenses, success: true })
+//     })
+//         .catch(err => {
+//             console.log(err)
+//             return res.status(500).json({ error: err, success: false })
+//         })
+// }
+const expense_per_page = 2;
+
+const getexpenses = (req, res) => {
+    const page = +req.query.page || 1;
+    let totalExp;
+    // console.log(req.user.id)
+    // totalExp = total;
+    Expense.findAndCountAll({
+        where: { userId: req.user.id },
+        offset: (page-1) * expense_per_page,
+        limit : expense_per_page
+    }).then((expenses) => {
+        // console.log(">>>>>>>>>>>>>>>>>>>>>total expenses are ", expenses.count)
+         totalExp = expenses.count
+        res.status(200).json({
+            expenses: expenses,
+            success: true,
+            pageData: {
+                currentPage: page,
+                hasNextPage: expense_per_page * page < totalExp,
+                nextPage: page + 1,
+                hasPreviousPage: page > 1,
+                previousPage: page - 1,
+                lastPage: Math.ceil(totalExp / expense_per_page)
+            }
+        });
     })
         .catch(err => {
             console.log(err)
             return res.status(500).json({ error: err, success: false })
         })
+
 }
 
 const deleteexpense = async (req, res) => {

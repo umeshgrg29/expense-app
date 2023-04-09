@@ -103,9 +103,9 @@
     <h1>
         Expenses
     </h1>
-    <ul id='listOfExpenses'>
-
-    </ul>
+    <ul id='listOfExpenses'></ul>
+    <div id="pagination"></div>
+    
     <ul id="leaderboard"></ul>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -146,25 +146,77 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            const page = 1;
             const token = localStorage.getItem('token')
             const decodeToken = parseJwt(token)
-            console.log(decodeToken)
+            // console.log(decodeToken)
             const ispremiumuser = decodeToken.ispremiumuser
             if (ispremiumuser) {
                 showPremiumuserMessage()
                 showLeaderboard()
             }
-            axios.get('http://localhost:3000/expense/getexpenses', { headers: { "Authorization": token } })
+            axios.get(`http://localhost:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
                 .then(response => {
-                    response.data.expenses.forEach(expense => {
+                    // console.log(response.data.expenses)
+                    response.data.expenses.rows.forEach(expense => {
 
                         addNewExpensetoUI(expense);
                     })
+                    // console.log(response.data.pageData)
+                    showPagination(response.data.pageData)
                 }).catch(err => {
                     showError(err)
                 })
         });
+        function showPagination({currentPage,hasNextPage, nextPage,hasPreviousPage, previousPage, lastPage}){
+            // console.log(pageData)
+            const pagination = document.getElementById('pagination')
+            pagination.innerHTML = '';
 
+            if(hasPreviousPage)
+            {
+                const btn2 = document.createElement('button')
+                btn2.innerHTML = previousPage
+                btn2.addEventListener('click', () => getExpenses(previousPage))
+                pagination.appendChild(btn2)
+            }
+
+            const btn1 = document.createElement('button')
+            btn1.innerHTML = `<h3>${currentPage}</h3>`
+            btn1.addEventListener('click', () => getExpenses(currentPage))
+            pagination.appendChild(btn1)
+
+            if(hasNextPage){
+                const btn3 = document.createElement('button')
+                btn3.innerHTML = nextPage
+                btn3.addEventListener('click', ()=> getExpenses(nextPage))
+                pagination.appendChild(btn3)
+            }
+
+        }
+        
+        function getExpenses(page){
+            const parentElement = document.getElementById('listOfExpenses');
+            parentElement.innerHTML = ''
+            console.log("inside get expenses")
+            const token = localStorage.getItem('token')
+
+            axios
+            .get(`http://localhost:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
+            .then(response => {
+                    // console.log(response.data.expenses)
+                    response.data.expenses.rows.forEach(expense => {
+
+                        addNewExpensetoUI(expense);
+                    })
+                    // console.log(response.data.pageData)
+                    showPagination(response.data.pageData)
+                }).catch(err => {
+                    showError(err)
+                })
+
+        }
+        
         function addNewExpensetoUI(expense) {
             const parentElement = document.getElementById('listOfExpenses');
             const expenseElemId = `expense-${expense.id}`;
