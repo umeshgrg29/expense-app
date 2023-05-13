@@ -76,11 +76,11 @@
 
             axios.post('http://localhost:3000/user/signup', { name, email, password })
                 .then(response => {
-                    console.log(response.newUserDetail);
+                    // console.log(response.newUserDetail);
                     alert('Signup successful!');
                 })
                 .catch(error => {
-                    console.log(error);
+                    // console.log(error);
                     alert('Signup failed.');
                 });
         }

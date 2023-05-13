@@ -44,7 +44,7 @@ const forgotpassword = async (req, res) => {
             throw new Error('User doesnt exist')
         }
     } catch(err){
-        console.error(err)
+        // console.error(err)
         return res.json({ message: err, sucess: false });
     }
 
@@ -89,13 +89,13 @@ const updatepassword = (req, res) => {
                     const saltRounds = 10;
                     bcrypt.genSalt(saltRounds, function(err, salt) {
                         if(err){
-                            console.log(err);
+                            // console.log(err);
                             throw new Error(err);
                         }
                         bcrypt.hash(newpassword, salt, function(err, hash) {
                             // Store hash in your password DB.
                             if(err){
-                                console.log(err);
+                                // console.log(err);
                                 throw new Error(err);
                             }
                             user.update({ password: hash }).then(() => {

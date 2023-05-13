@@ -6,8 +6,8 @@ const userController = require('./user')
 const purchasepremium =async (req, res) => {
     try {
         var rzp = new Razorpay({
-            key_id: 'rzp_test_kMRdyKNP4W8OBw',
-            key_secret: 'p6o4IY3c2fBa5mxwwd2jBkA6'
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET
         })
         const amount = 2500;
 
@@ -23,7 +23,7 @@ const purchasepremium =async (req, res) => {
             })
         })
     } catch(err){
-        console.log(err);
+        // console.log(err);
         res.status(403).json({ message: 'Sometghing went wrong', error: err})
     }
 }
@@ -45,7 +45,7 @@ const purchasepremium =async (req, res) => {
         
                 
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         res.status(403).json({ errpr: err, message: 'Something went wrong' })
 
     }

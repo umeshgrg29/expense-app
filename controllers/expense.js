@@ -21,7 +21,7 @@ const downloadexpense = async (req, res) => {
         res.status(200).json({ fileURL, success: true })
     }
     catch (err) {
-        console.log(err)
+        // console.log(err)
         res.status(500).json({ fileURL: '', success: false })
     }
 }
@@ -64,7 +64,7 @@ const addexpense = async (req, res) => {
 //             return res.status(500).json({ error: err, success: false })
 //         })
 // }
-const expense_per_page = 2;
+const expense_per_page = 3;
 
 const getexpenses = (req, res) => {
     const page = +req.query.page || 1;
@@ -92,7 +92,7 @@ const getexpenses = (req, res) => {
         });
     })
         .catch(err => {
-            console.log(err)
+            // console.log(err)
             return res.status(500).json({ error: err, success: false })
         })
 
@@ -104,6 +104,8 @@ const deleteexpense = async (req, res) => {
         return res.status(400).json({ success: false, })
     }
 
+    // const user = await User.findOne({ where: { id: req.user.userId } });
+    // console.log(user.totalExpenses)
     //  const exp =  await Expense.findAll({ where: { id: expenseid } })
 
     //  console.log("expense is >>>>>>>>>>>>>>>>>>>>>>>>>>>>", exp)
@@ -114,7 +116,7 @@ const deleteexpense = async (req, res) => {
         }
         return res.status(200).json({ success: true, message: "Deleted Successfuly" })
     }).catch(err => {
-        console.log(err);
+        // console.log(err);
         return res.status(500).json({ success: true, message: "Failed" })
     })
 }

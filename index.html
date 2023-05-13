@@ -105,7 +105,7 @@
     </h1>
     <ul id='listOfExpenses'></ul>
     <div id="pagination"></div>
-    
+
     <ul id="leaderboard"></ul>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -167,14 +167,13 @@
                 }).catch(err => {
                     showError(err)
                 })
-        });
-        function showPagination({currentPage,hasNextPage, nextPage,hasPreviousPage, previousPage, lastPage}){
+        })
+        function showPagination({ currentPage, hasNextPage, nextPage, hasPreviousPage, previousPage, lastPage }) {
             // console.log(pageData)
             const pagination = document.getElementById('pagination')
             pagination.innerHTML = '';
 
-            if(hasPreviousPage)
-            {
+            if (hasPreviousPage) {
                 const btn2 = document.createElement('button')
                 btn2.innerHTML = previousPage
                 btn2.addEventListener('click', () => getExpenses(previousPage))
@@ -186,24 +185,24 @@
             btn1.addEventListener('click', () => getExpenses(currentPage))
             pagination.appendChild(btn1)
 
-            if(hasNextPage){
+            if (hasNextPage) {
                 const btn3 = document.createElement('button')
                 btn3.innerHTML = nextPage
-                btn3.addEventListener('click', ()=> getExpenses(nextPage))
+                btn3.addEventListener('click', () => getExpenses(nextPage))
                 pagination.appendChild(btn3)
             }
 
         }
-        
-        function getExpenses(page){
+
+        function getExpenses(page) {
             const parentElement = document.getElementById('listOfExpenses');
             parentElement.innerHTML = ''
-            console.log("inside get expenses")
+            // console.log("inside get expenses")
             const token = localStorage.getItem('token')
 
             axios
-            .get(`http://localhost:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
-            .then(response => {
+                .get(`http://localhost:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
+                .then(response => {
                     // console.log(response.data.expenses)
                     response.data.expenses.rows.forEach(expense => {
 
@@ -216,7 +215,7 @@
                 })
 
         }
-        
+
         function addNewExpensetoUI(expense) {
             const parentElement = document.getElementById('listOfExpenses');
             const expenseElemId = `expense-${expense.id}`;
@@ -250,7 +249,7 @@
             inputElement.onclick = async () => {
                 const token = localStorage.getItem('token')
                 const userLeaderBoardArray = await axios.get('http://localhost:3000/premium/showLeaderBoard', { headers: { "Authorization": token } })
-                console.log(userLeaderBoardArray)
+                // console.log(userLeaderBoardArray)
 
                 var leaderboardElem = document.getElementById('leaderboard')
                 leaderboardElem.innerHTML += '<h1> Leader Board </<h1>'
@@ -276,7 +275,7 @@
                         //  which if we open in browser, the file would download
                         var a = document.createElement("a");
                         a.href = response.data.fileURL;
-                        console.log(a)
+                        // console.log(a)
                         a.download = 'myexpense.csv';
                         a.click();
                     } else {
@@ -292,15 +291,15 @@
         document.getElementById('rzp-button1').onclick = async function (e) {
             const token = localStorage.getItem('token')
             const response = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { "Authorization": token } });
-            console.log(response);
+            // console.log(response);
             var options =
             {
                 "key": response.data.key_id, // Enter the Key ID generated from the Dashboard
                 "order_id": response.data.order.id,// For one time payment
                 "prefill": {
-                    "name": "Yash Prasad",
-                    "email": "prasadyash2411@gmail.com",
-                    "contact": "7003442036"
+                    "name": "Umesh Garg",
+                    "email": "kanugrg29@gmail.com",
+                    "contact": "7210178000"
                 },
                 // This handler function will handle the success payment
                 "handler": async function (response) {
@@ -309,7 +308,7 @@
                         payment_id: response.razorpay_payment_id,
                     }, { headers: { "Authorization": token } })
 
-                    console.log(res)
+                    // console.log(res)
                     alert('You are a Premium User Now')
                     document.getElementById('rzp-button1').style.visibility = "hidden"
                     document.getElementById('message').innerHTML = "You are a premium user "
@@ -322,7 +321,7 @@
             e.preventDefault();
 
             rzp1.on('payment.failed', function (response) {
-                console.log(response)
+                // console.log(response)
                 alert('Something went wrong')
             });
         }
