@@ -3,6 +3,8 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const fs = require('fs')
 
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 var cors = require('cors')
 const sequelize = require('./util/database');
@@ -21,9 +23,6 @@ const resetPasswordRoutes = require('./routes/resetpassword')
 const app = express();
 
 
-const dotenv = require('dotenv');
-
-dotenv.config();
 
 app.use(cors())
 app.use(express.json()); 
