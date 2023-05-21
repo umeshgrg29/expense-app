@@ -31,7 +31,11 @@ app.use('/user', userRoutes)
 app.use('/expense', expenseRoutes)
 app.use('/purchase', purchaseRoutes)
 app.use('/premium', premiumFeatureRoutes)
-app.use('/password', resetPasswordRoutes);
+app.use('/password', resetPasswordRoutes)
+
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname, `/${req.url}`))
+})
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'})
 

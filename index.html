@@ -121,7 +121,7 @@
             }
             console.log(expenseDetails)
             const token = localStorage.getItem('token')
-            axios.post('http://localhost:3000/expense/addexpense', expenseDetails, { headers: { "Authorization": token } })
+            axios.post('http://3.95.11.123:3000/expense/addexpense', expenseDetails, { headers: { "Authorization": token } })
                 .then((response) => {
 
                     addNewExpensetoUI(response.data.expense);
@@ -155,7 +155,7 @@
                 showPremiumuserMessage()
                 showLeaderboard()
             }
-            axios.get(`http://localhost:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
+            axios.get(`http://3.95.11.123:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
                 .then(response => {
                     // console.log(response.data.expenses)
                     response.data.expenses.rows.forEach(expense => {
@@ -201,7 +201,7 @@
             const token = localStorage.getItem('token')
 
             axios
-                .get(`http://localhost:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
+                .get(`http://3.95.11.123:3000/expense/getexpenses?page=${page}`, { headers: { "Authorization": token } })
                 .then(response => {
                     // console.log(response.data.expenses)
                     response.data.expenses.rows.forEach(expense => {
@@ -230,7 +230,7 @@
 
         function deleteExpense(e, expenseid) {
             const token = localStorage.getItem('token')
-            axios.delete(`http://localhost:3000/expense/deleteexpense/${expenseid}`, { headers: { "Authorization": token } }).then(() => {
+            axios.delete(`http://3.95.11.123:3000/expense/deleteexpense/${expenseid}`, { headers: { "Authorization": token } }).then(() => {
 
                 removeExpensefromUI(expenseid);
 
@@ -248,7 +248,7 @@
             inputElement.value = 'Show Leaderboard'
             inputElement.onclick = async () => {
                 const token = localStorage.getItem('token')
-                const userLeaderBoardArray = await axios.get('http://localhost:3000/premium/showLeaderBoard', { headers: { "Authorization": token } })
+                const userLeaderBoardArray = await axios.get('http://3.95.11.123:3000/premium/showLeaderBoard', { headers: { "Authorization": token } })
                 // console.log(userLeaderBoardArray)
 
                 var leaderboardElem = document.getElementById('leaderboard')
@@ -268,7 +268,7 @@
 
         function download() {
             const token = localStorage.getItem('token')
-            axios.get('http://localhost:3000/user/download', { headers: { "Authorization": token } })
+            axios.get('http://3.95.11.123:3000/user/download', { headers: { "Authorization": token } })
                 .then((response) => {
                     if (response.status === 200) {
                         //the bcakend is essentially sending a download link
@@ -290,7 +290,7 @@
 
         document.getElementById('rzp-button1').onclick = async function (e) {
             const token = localStorage.getItem('token')
-            const response = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { "Authorization": token } });
+            const response = await axios.get('http://3.95.11.123:3000/purchase/premiummembership', { headers: { "Authorization": token } });
             // console.log(response);
             var options =
             {
@@ -303,7 +303,7 @@
                 },
                 // This handler function will handle the success payment
                 "handler": async function (response) {
-                    const res = await axios.post('http://localhost:3000/purchase/updatetransactionstatus', {
+                    const res = await axios.post('http://3.95.11.123:3000/purchase/updatetransactionstatus', {
                         order_id: options.order_id,
                         payment_id: response.razorpay_payment_id,
                     }, { headers: { "Authorization": token } })
